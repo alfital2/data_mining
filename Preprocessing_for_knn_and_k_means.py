@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Module: Preprocessing.py
+# Module: Preprocessing_for_knn_and_k_means.py
 import pandas as pd
 import numpy as np
 
 
-class Preprocessing():
+class Preprocessing_for_knn_and_k_means():
 
     def __init__(self, train, test, structure_file_name, numBins=None):
         # self.train_df = self.init_data_frames(train_file_name)
@@ -14,8 +14,7 @@ class Preprocessing():
         self.test_df = test
         self.structure_dict_file = self.structure_txt_file_to_dict(
             structure_file_name)
-        self.discretization(self.train_df, numBins)
-        self.discretization(self.test_df, numBins)
+        self.discretization(self.train_df, self.test_df, numBins)
 
     def init_data_frames(self, csv_file_name):
         return pd.read_csv(csv_file_name).applymap(lambda s: s.lower() if type(s) == str else s)
@@ -26,11 +25,12 @@ class Preprocessing():
             np.array([-float('inf')]), np.linspace(min(data), max(data), NumBins - 1))
         binsIntervals = np.append(binsIntervals, np.array([float('inf')]))
 
-        for i in range(len(binsIntervals)-1):
-            bins['bin{0}'.format(i+1)] = (binsIntervals[i], binsIntervals[i+1])
+        for i in range(len(binsIntervals) - 1):
+            bins['{0}'.format(i + 1)] = (binsIntervals[i], binsIntervals[i + 1])
         return bins
 
     def structure_txt_file_to_dict(self, Structure_open):
+
         structure_dict = {}
         for line in Structure_open:
             first, *middle, last = line.replace('@ATTRIBUTE', '').split()
@@ -38,15 +38,20 @@ class Preprocessing():
                 x for x in last[1:-1].split(',')]
         return structure_dict
 
-    def discretization(self, data, NumBins=None):
-        self.__replaceNans(data)
+    def discretization(self, train_data, test_data, NumBins=None):
+        self.__replaceNans(train_data)
+        self.__alter_binary_columns(train_data,test_data)
+        train_data,test_data = self.__remove_non_numeric(train_data,test_data)
+        print(train_data)
+        print(test_data)
+
         if NumBins == None:
             NumBins = 10
 
-        for column in (list(data)[:-1]):
+        for column in (list(train_data)[:-1]):
             if self.structure_dict_file[column] == 'NUMERIC':
                 self.__replaceCol(self.create_new_column_acording_bins(
-                    NumBins, column, data), column, data)
+                    NumBins, column, train_data), column, train_data)
 
     def create_new_column_acording_bins(self, NumBins, column, data):
         bins = self.make_bins(data[column], NumBins, column)
@@ -64,3 +69,20 @@ class Preprocessing():
 
     def __replaceCol(self, newCol, column, data):
         data[column] = newCol
+
+    def __remove_non_numeric(self, data_train, data_test):
+        for key in self.structure_dict_file:
+            if self.structure_dict_file[key] != "NUMERIC" and key != "class":
+                data_train = data_train.drop([key], axis=1)
+                data_test = data_test.drop([key], axis=1)
+        return [data_train,data_test]
+
+    def __alter_binary_columns(self, data_train, data_test):
+            if (self.structure_dict_file[col] == ['yes', 'no'] or self.structure_dict_file[col] == ['no', 'yes']) \
+                    and col != "class":
+                data_train.loc[data_train[col] == "yes", col] = 1
+                data_train.loc[data_train[col] == "no", col] = 0
+                data_test.loc[data_test[col] == "yes", col] = 1
+                data_test.loc[data_test[col] == "no", col] = 0
+
+                self.structure_dict_file[col] = "NUMERIC"
