@@ -78,6 +78,7 @@ class Preprocessing_for_knn_and_k_means():
         return [data_train,data_test]
 
     def __alter_binary_columns(self, data_train, data_test):
+        for col in data_train:
             if (self.structure_dict_file[col] == ['yes', 'no'] or self.structure_dict_file[col] == ['no', 'yes']) \
                     and col != "class":
                 data_train.loc[data_train[col] == "yes", col] = 1
