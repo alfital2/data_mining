@@ -42,8 +42,6 @@ class Preprocessing_for_knn_and_k_means():
         self.__replaceNans(train_data)
         self.__alter_binary_columns(train_data,test_data)
         train_data,test_data = self.__remove_non_numeric(train_data,test_data)
-        print(train_data)
-        print(test_data)
 
         if NumBins == None:
             NumBins = 10
@@ -52,6 +50,8 @@ class Preprocessing_for_knn_and_k_means():
             if self.structure_dict_file[column] == 'NUMERIC':
                 self.__replaceCol(self.create_new_column_acording_bins(
                     NumBins, column, train_data), column, train_data)
+        self.train_df= train_data
+        self.test_df = test_data
 
     def create_new_column_acording_bins(self, NumBins, column, data):
         bins = self.make_bins(data[column], NumBins, column)
