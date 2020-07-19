@@ -753,10 +753,13 @@ def create_run_panel(parent, resources):
         output_components['FN_box'].config(text = result['FN'])
         setStatus('Done')
 
-    def start (e):
+    def start(e):
         F_D_L_S()
         if(output_components['satus_box']['text'] == 'fdls go'):
-            threading.Thread(target=update_output, kwargs=arg_dict).start()
+            kwargs = {**arg_dict, **{'test': arg_dict['test'].copy(deep=True)
+                                    , 'train': arg_dict['train'].copy(deep=True)}
+                      }
+            threading.Thread(target=update_output, kwargs=kwargs).start()
 
     # start button
     create_button(run_panel, resources['run']['start']['location'],
