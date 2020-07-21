@@ -38,7 +38,7 @@ class Preprocessing_for_knn_and_k_means():
                 x for x in last[1:-1].split(',')]
         return structure_dict
 
-    # def discretization(self, train_data, test_data, NumBins=None):
+    def discretization(self, train_data, test_data, NumBins=None):
         self.__replaceNans(train_data)
         self.__alter_binary_columns(train_data,test_data)
         train_data,test_data = self.__remove_non_numeric(train_data,test_data)
@@ -74,7 +74,8 @@ class Preprocessing_for_knn_and_k_means():
         for key in self.structure_dict_file:
             if self.structure_dict_file[key] != "NUMERIC" and key != "class":
                 data_train = data_train.drop([key], axis=1)
-                data_test = data_test.drop([key], axis=1)
+                if data_test:
+                    data_test = data_test.drop([key], axis=1)
         return [data_train,data_test]
 
     def __alter_binary_columns(self, data_train, data_test):
@@ -83,7 +84,8 @@ class Preprocessing_for_knn_and_k_means():
                     and col != "class":
                 data_train.loc[data_train[col] == "yes", col] = 1
                 data_train.loc[data_train[col] == "no", col] = 0
-                data_test.loc[data_test[col] == "yes", col] = 1
-                data_test.loc[data_test[col] == "no", col] = 0
+                if data_test:
+                    data_test.loc[data_test[col] == "yes", col] = 1
+                    data_test.loc[data_test[col] == "no", col] = 0
 
                 self.structure_dict_file[col] = "NUMERIC"
