@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-import Preprocessing_for_knn_and_k_means
+import Preprocessing_for_knn_and_k_means as PPknn
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
@@ -17,7 +17,7 @@ train = pd.read_csv("train.csv")
 test = pd.read_csv("test.csv")
 ########################
 
-preprocessor = Preprocessing_for_knn_and_k_means.Preprocessing_for_knn_and_k_means(train, test, structure_file, 3)
+preprocessor = PPknn.Preprocessing_for_knn_and_k_means(train, test, structure_file, 3)
 train_features = preprocessor.train_df.iloc[:, :-1].values
 train_class = preprocessor.train_df.iloc[:, -1].values
 
@@ -99,12 +99,12 @@ if True:
         print(classification_report(test_class, pred_i))
 
 
-    # plt.figure(figsize=(12, 6))
-    # plt.plot(range(1, 40), error, color='red', linestyle='dashed', marker='o',
-    #          markerfacecolor='blue', markersize=10)
-    # plt.title('Error Rate K Value')
-    # plt.xlabel('K Value')
-    # plt.ylabel('Mean Error')
-    # plt.show()
-    # print("preprocessing done")
+    plt.figure(figsize=(12, 6))
+    plt.plot(range(1, 40), error, color='red', linestyle='dashed', marker='o',
+             markerfacecolor='blue', markersize=10)
+    plt.title('Error Rate K Value')
+    plt.xlabel('K Value')
+    plt.ylabel('Mean Error')
+    plt.show()
+    print("preprocessing done")
 

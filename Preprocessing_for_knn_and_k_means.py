@@ -38,7 +38,7 @@ class Preprocessing_for_knn_and_k_means():
                 x for x in last[1:-1].split(',')]
         return structure_dict
 
-    def discretization(self, train_data, test_data, NumBins=None):
+    # def discretization(self, train_data, test_data, NumBins=None):
         self.__replaceNans(train_data)
         self.__alter_binary_columns(train_data,test_data)
         train_data,test_data = self.__remove_non_numeric(train_data,test_data)
