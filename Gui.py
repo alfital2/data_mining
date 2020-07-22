@@ -6,6 +6,7 @@ from tkinter import filedialog, messagebox, font
 import time
 import threading 
 import pandas as pd
+import Preprocessing as pr
 '''
         _                 _   
        | |               | |  
@@ -83,7 +84,7 @@ OUR_NAIVE_BAYES = foo
 NAIVE_BAYES     = foo
 K_NN            = foo 
 K_MEANS         = foo
-PREPROCESS      = foo
+PREPROCESS      = pr.Preprocessing_adapter
 # TODO end ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 def execute_update_kwargs( function , **kwargs):
