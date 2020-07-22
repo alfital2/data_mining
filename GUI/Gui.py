@@ -756,8 +756,10 @@ def create_run_panel(parent, resources):
     def start(e):
         F_D_L_S()
         if(output_components['satus_box']['text'] == 'fdls go'):
+            # creating kwargs - making clone of test,train,structure
             kwargs = {**arg_dict, **{'test': arg_dict['test'].copy(deep=True)
-                                    , 'train': arg_dict['train'].copy(deep=True)}
+                                    , 'train': arg_dict['train'].copy(deep=True)
+                                    , 'structure': [x for x in list(arg_dict['structure'])]}
                       }
             threading.Thread(target=update_output, kwargs=kwargs).start()
 
