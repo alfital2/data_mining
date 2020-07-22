@@ -152,6 +152,10 @@ def getResources():
                                       'location':(385,245) },
             "replace_nans"         : {'image':ImageTk.PhotoImage(Image.open("res/prepro/replacenans.png")),
                                       'location':(385,245) },
+            "8020_on"              : {'image':ImageTk.PhotoImage(Image.open("res/prepro/8020u.png")),
+                                      'location':(225,287) },
+            "8020_off"             : {'image':ImageTk.PhotoImage(Image.open("res/prepro/8020d.png")),
+                                      'location':(225,287) },
             }, 
         "classif":{
             "background"           :{'image':ImageTk.PhotoImage(Image.open("res/classif/classifpanel.png")),
@@ -241,7 +245,8 @@ arg_dict = { 'test':None,
              'bin_type':None,
              'missing_values': 'remove_nans',  # removing nans by default
              'choosen_function':None,
-             'choosen_function_name':None
+             'choosen_function_name':None,
+             '8020':None
     }
 
 #                           _       _ _      _   
@@ -289,6 +294,7 @@ button_actions = {
             'equal_width'    : lambda  : toggle_bin_type('equal_width'),
             'equal_frequency': lambda  : toggle_bin_type('equal_frequency'),
             'entropy'        : lambda  : toggle_bin_type('entropy'),
+            '8020'           : lambda  : toggle_8020(),
         },
         "classif":{
             'our_naive_bayes': lambda  : toggle_choosen_function(functions['our_naive_bayes'],'our_naive_bayes'),
@@ -374,6 +380,22 @@ def save_to_file(arg_dict,output_components):
         output_components['satus_box'].config(text = 'Saved')
     else:
         output_components['satus_box'].config(text = 'Nothing to save')
+
+def pass_kwargs(**kwargs):
+    return kwargs
+
+def split_8020(**kwargs):
+    df = kwargs['train']
+    train = df.sample(frac=0.8,random_state=200) #random state is a seed value
+    test = df.drop(train.index)
+    return {**kwargs,**{'train':train, 'test': test }}
+
+def toggle_8020():
+    if(arg_dict['8020'] == pass_kwargs):
+        arg_dict['8020'] = split_8020
+    else:
+        arg_dict['8020'] = pass_kwargs
+
 
 def create_button(perent, location, image ,function ,enter_color="#2b2d42" ,leave_color="gray", bg_color="gray"):
     def on_enter(e):
@@ -528,6 +550,15 @@ def create_prepro_panel(parent, resources):
                          resources['prepro']['replace_nans']['image'],
                          resources['prepro']['remove_nans']['location'],
                          button_actions['prepro']['missing_values'],
+                         lambda: None)
+
+    # 80 / 20 button
+    arg_dict['8020'] = pass_kwargs
+    create_lever_button(prepro_panel,
+                         resources['prepro']['8020_off']['image'],
+                         resources['prepro']['8020_on']['image'],
+                         resources['prepro']['8020_off']['location'],
+                         button_actions['prepro']['8020'],
                          lambda: None)
 
     conected_lever_buttons = []
@@ -725,7 +756,8 @@ def create_run_panel(parent, resources):
     def F_D_L_S(): # Fault Detection Location System
         if(not isinstance(arg_dict['train'], pd.DataFrame)):
             setStatus('Load train')
-        elif(not isinstance(arg_dict['test'], pd.DataFrame)):
+        elif(not isinstance(arg_dict['test'], pd.DataFrame)
+            and arg_dict['8020'] == pass_kwargs):
             setStatus('Load test')
         elif(arg_dict['structure'] == None ):
             setStatus('Load structure')
@@ -745,7 +777,7 @@ def create_run_panel(parent, resources):
     def update_output(**kwargs):
         setStatus('Working...')
         function = kwargs['choosen_function']
-        result = function(**kwargs)
+        result = function(**kwargs['8020'](**kwargs))
         setScore(result['score'])
         output_components['TP_box'].config(text = result['TP'])
         output_components['TN_box'].config(text = result['TN'])
