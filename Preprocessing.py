@@ -25,6 +25,7 @@ class Preprocessing():
         return bins
 
     def list_of_strings_to_dict(self, Structure):
+        print(Structure)
         structure_dict = {}
         for line in Structure:
             first, *middle, last = line.replace('@ATTRIBUTE', '').split()
@@ -63,9 +64,9 @@ class Preprocessing():
 
 def Preprocessing_adapter(**kwargs):
     train = kwargs['train']
-    test = kwargs['train']
-    structure = kwargs['train']
-    numBins = kwargs['train']
+    test = kwargs['test']
+    structure = kwargs['structure']
+    numBins = kwargs['number_of_bins']
     remove_nans = True if kwargs['missing_values'] == 'remove_nans' else False
     inst = Preprocessing( train, test, structure, remove_nans ,numBins)
     return  {'test':inst.test_df ,'train':inst.train_df}
