@@ -4,6 +4,7 @@ import knn  as knn
 import time
 import pandas as pd
 import our_id3 as our_id3
+import id3 as id3
 
 def foo (**kwargs):                                                # 
     print(kwargs)                                                  # 
@@ -11,7 +12,7 @@ def foo (**kwargs):                                                #
     return { 'score':100 , 'TP':100 , 'TN':200 ,'FP':10 ,'FN':20 } #
 
 OUR_ID3         = our_id3.our_id3_adapter
-ID3             = foo
+ID3             = id3.id3_adapret
 OUR_NAIVE_BAYES = foo
 NAIVE_BAYES     = foo
 K_NN            = knn.run 
@@ -55,5 +56,5 @@ functions = {
 
 # test run example:
 print(
-functions['our_id3'](**kwargs)
+functions['id3'](**kwargs)
 )
