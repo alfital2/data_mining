@@ -9,6 +9,7 @@ import threading
 import pandas as pd
 import Preprocessing as pr
 import knn  as knn
+import our_id3 as our_id3
 '''
         _                 _   
        | |               | |  
@@ -80,7 +81,7 @@ def foo (**kwargs):                                                #
 #   |_| |_|  \___/|_| |_| |_| |_| |_| |_|\___/ \__,_|\__,_|_|\___||___/
 #                                                                      
 # (from modules)                                                                  
-OUR_ID3         = foo
+OUR_ID3         = our_id3.our_id3_adapter
 ID3             = foo
 OUR_NAIVE_BAYES = foo
 NAIVE_BAYES     = foo

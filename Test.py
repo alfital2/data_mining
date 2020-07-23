@@ -3,13 +3,14 @@ import Preprocessing as pr
 import knn  as knn
 import time
 import pandas as pd
+import our_id3 as our_id3
 
 def foo (**kwargs):                                                # 
     print(kwargs)                                                  # 
     time.sleep(2)                                                  # 
     return { 'score':100 , 'TP':100 , 'TN':200 ,'FP':10 ,'FN':20 } #
 
-OUR_ID3         = foo
+OUR_ID3         = our_id3.our_id3_adapter
 ID3             = foo
 OUR_NAIVE_BAYES = foo
 NAIVE_BAYES     = foo
@@ -54,5 +55,5 @@ functions = {
 
 # test run example:
 print(
-functions['knn'](**kwargs)
+functions['our_id3'](**kwargs)
 )

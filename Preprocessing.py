@@ -25,7 +25,6 @@ class Preprocessing():
         return bins
 
     def list_of_strings_to_dict(self, Structure):
-        print(Structure)
         structure_dict = {}
         for line in Structure:
             first, *middle, last = line.replace('@ATTRIBUTE', '').split()
