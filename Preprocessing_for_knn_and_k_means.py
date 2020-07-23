@@ -16,6 +16,7 @@ class Preprocessing_for_knn_and_k_means():
             structure_file_name)
         self.discretization(self.train_df, self.test_df, numBins)
 
+
     def init_data_frames(self, csv_file_name):
         return pd.read_csv(csv_file_name).applymap(lambda s: s.lower() if type(s) == str else s)
 
@@ -40,16 +41,18 @@ class Preprocessing_for_knn_and_k_means():
 
     def discretization(self, train_data, test_data, NumBins=None):
         self.__replaceNans(train_data)
+        self.__replaceNans(test_data)
         self.__alter_binary_columns(train_data,test_data)
         train_data,test_data = self.__remove_non_numeric(train_data,test_data)
 
-        if NumBins == None:
-            NumBins = 10
-
-        for column in (list(train_data)[:-1]):
-            if self.structure_dict_file[column] == 'NUMERIC':
-                self.__replaceCol(self.create_new_column_acording_bins(
-                    NumBins, column, train_data), column, train_data)
+        # if NumBins == None:
+        #     NumBins = 10
+        #
+        # for column in (list(train_data)[:-1]):
+        #     if self.structure_dict_file[column] == 'NUMERIC':
+        #         self.__replaceCol(self.create_new_column_acording_bins(
+        #             NumBins, column, train_data), column, train_data)
+        #
         self.train_df= train_data
         self.test_df = test_data
 

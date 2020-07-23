@@ -8,7 +8,10 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
+
+
 def run(**kwargs ):  # run(files, mode, bins, k=5):
+
     preprocessor = PPknn.Preprocessing_for_knn_and_k_means(kwargs['train'], kwargs['test'], kwargs['structure'],
                                                            kwargs['number_of_bins'])
     train_features, train_class = get_separated_data(preprocessor, 'train')
@@ -64,3 +67,18 @@ def get_classification_column(preprocessor, file_type):
 
 def init_files(files):
     return [files['structure'], files['train'], files['test']]
+
+
+# tmp = open("Structure.txt", "r")
+# structure_file = []
+# for line in tmp:
+#     structure_file.append(line)
+# tmp.close()
+# train = pd.read_csv("train.csv")
+# test = pd.read_csv("test.csv")
+# ########################
+#
+#
+# kwargs= {'train' : train, 'test' : test , 'structure':structure_file , 'k' : 5 , 'number_of_bins' : 5}
+# print(run(**kwargs))
+
