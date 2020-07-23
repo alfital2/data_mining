@@ -3,9 +3,12 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk,Image
 from tkinter import filedialog, messagebox, font
+from sklearn.model_selection import train_test_split
 import time
 import threading 
 import pandas as pd
+import Preprocessing as pr
+import knn  as knn
 '''
         _                 _   
        | |               | |  
@@ -81,9 +84,9 @@ OUR_ID3         = foo
 ID3             = foo
 OUR_NAIVE_BAYES = foo
 NAIVE_BAYES     = foo
-K_NN            = foo 
+K_NN            = knn.run 
 K_MEANS         = foo
-PREPROCESS      = foo
+PREPROCESS      = pr.Preprocessing_adapter
 # TODO end ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 def execute_update_kwargs( function , **kwargs):
@@ -385,9 +388,15 @@ def pass_kwargs(**kwargs):
     return kwargs
 
 def split_8020(**kwargs):
+
     df = kwargs['train']
-    train = df.sample(frac=0.8,random_state=200) #random state is a seed value
-    test = df.drop(train.index)
+    # train = df.sample(frac=0.8,random_state=200) #random state is a seed value
+    # test = df.drop(train.index)
+    train, test = train_test_split(df, test_size=0.2, random_state=42, shuffle=True)
+    
+    train.dropna(inplace=True)
+    test.dropna(inplace=True)
+
     return {**kwargs,**{'train':train, 'test': test }}
 
 def toggle_8020():
@@ -789,10 +798,11 @@ def create_run_panel(parent, resources):
         F_D_L_S()
         if(output_components['satus_box']['text'] == 'fdls go'):
             # creating kwargs - making clone of test,train,structure
-            kwargs = {**arg_dict, **{'test': arg_dict['test'].copy(deep=True)
-                                    , 'train': arg_dict['train'].copy(deep=True)
+            kwargs = {**arg_dict, **{'train': arg_dict['train'].copy(deep=True)
                                     , 'structure': [x for x in list(arg_dict['structure'])]}
                       }
+            if(arg_dict['8020'] == pass_kwargs):
+                kwargs = {**kwargs , **{'test':arg_dict['test'].copy(deep=True)}}
             threading.Thread(target=update_output, kwargs=kwargs).start()
 
     # start button
