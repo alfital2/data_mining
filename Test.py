@@ -6,6 +6,7 @@ import pandas as pd
 import our_id3 as our_id3
 import id3 as id3
 import naive_bayes as naive_bayes
+import kmeans as km
 
 def foo (**kwargs):                                                # 
     print(kwargs)                                                  # 
@@ -17,7 +18,7 @@ ID3             = id3.id3_adapret
 OUR_NAIVE_BAYES = foo
 NAIVE_BAYES     = naive_bayes.naive_bayes_adapter
 K_NN            = knn.run 
-K_MEANS         = foo
+K_MEANS         = km.run
 PREPROCESS      = pr.Preprocessing_adapter
 
 def load_structure():
@@ -57,5 +58,5 @@ functions = {
 
 # test run example:
 print(
-functions['naive_bayes'](**kwargs)
+functions['k_means'](**kwargs)
 )
