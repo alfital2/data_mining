@@ -10,6 +10,7 @@ import pandas as pd
 import Preprocessing as pr
 import knn  as knn
 import our_id3 as our_id3
+import id3 as id3
 '''
         _                 _   
        | |               | |  
@@ -82,7 +83,7 @@ def foo (**kwargs):                                                #
 #                                                                      
 # (from modules)                                                                  
 OUR_ID3         = our_id3.our_id3_adapter
-ID3             = foo
+ID3             = id3.id3_adapret
 OUR_NAIVE_BAYES = foo
 NAIVE_BAYES     = foo
 K_NN            = knn.run 
