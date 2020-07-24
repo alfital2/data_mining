@@ -5,6 +5,7 @@ import time
 import pandas as pd
 import our_id3 as our_id3
 import id3 as id3
+import naive_bayes as naive_bayes
 
 def foo (**kwargs):                                                # 
     print(kwargs)                                                  # 
@@ -14,7 +15,7 @@ def foo (**kwargs):                                                #
 OUR_ID3         = our_id3.our_id3_adapter
 ID3             = id3.id3_adapret
 OUR_NAIVE_BAYES = foo
-NAIVE_BAYES     = foo
+NAIVE_BAYES     = naive_bayes.naive_bayes_adapter
 K_NN            = knn.run 
 K_MEANS         = foo
 PREPROCESS      = pr.Preprocessing_adapter
@@ -47,8 +48,8 @@ def execute_update_kwargs( function , **kwargs):
 functions = {
     'our_id3'        : lambda **kwargs: OUR_ID3(**execute_update_kwargs(PREPROCESS, **kwargs)),
     'id3'            : lambda **kwargs: ID3(**execute_update_kwargs(PREPROCESS, **kwargs)),
-    'naive_bayes'    : lambda **kwargs: OUR_NAIVE_BAYES(**execute_update_kwargs(PREPROCESS, **kwargs)),
-    'our_naive_bayes': lambda **kwargs: NAIVE_BAYES(**execute_update_kwargs(PREPROCESS, **kwargs)),
+    'naive_bayes'    : lambda **kwargs: NAIVE_BAYES(**execute_update_kwargs(PREPROCESS, **kwargs)),
+    'our_naive_bayes': lambda **kwargs: OUR_NAIVE_BAYES(**execute_update_kwargs(PREPROCESS, **kwargs)),
     # knn/ kmeans has its own preprossesing
     'knn'            : lambda **kwargs: K_NN(**kwargs),  
     'k_means'        : lambda **kwargs: K_MEANS(**kwargs)
@@ -56,5 +57,5 @@ functions = {
 
 # test run example:
 print(
-functions['id3'](**kwargs)
+functions['naive_bayes'](**kwargs)
 )

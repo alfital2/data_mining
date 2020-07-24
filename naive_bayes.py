@@ -7,8 +7,29 @@ def naive_bayes_adapter(**kwargs):
     # getting data from kwargs
     train = kwargs['train']
     test = kwargs['test']
-    # bulding encoder
+    # megreing data to get all uniques and to build encoder for all
     merged_data = pd.concat([train,test])
+    # adding unknown uniques to train dataframe 
+    # by adding new row with that unknown unique and rest are most cummon uniques
+    columns = merged_data.columns
+    uniques_lists = dict()
+    for col in columns:
+        all_elemets = set(merged_data[col].unique())
+        uniques_lists[col] = all_elemets.difference(set(train[col].unique()))
+
+    most_cummon = list()
+    for col in columns:
+        most_cummon.append(train[col].value_counts().idxmax())
+    most_cummon = tuple(most_cummon)
+
+
+    rows_to_add = []
+    for i,col in enumerate(columns):
+        for unique in uniques_lists[col]:
+            rows_to_add.append(most_cummon[:i] + (unique,) + most_cummon[i+1:] )
+
+    train = train.append(pd.DataFrame(rows_to_add, columns=columns))
+    # bulding encoder
     merged_data_without_class = merged_data.drop('class',1)
     encoder = OrdinalEncoder()
     encoder.fit(merged_data_without_class)
