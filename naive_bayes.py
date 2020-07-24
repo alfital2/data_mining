@@ -3,51 +3,31 @@ import pandas as pd
 from sklearn.naive_bayes import CategoricalNB
 from sklearn.preprocessing import OrdinalEncoder
 
-def naive_bayes_adapter(**kwargs):
-    # getting data from kwargs
-    train = kwargs['train']
-    test = kwargs['test']
-    # megreing data to get all uniques and to build encoder for all
-    merged_data = pd.concat([train,test])
+
+def improove_train(train, merged_data):
+    train = train.copy() # making sure no harm is made to the original train
     # adding unknown uniques to train dataframe 
     # by adding new row with that unknown unique and rest are most cummon uniques
     columns = merged_data.columns
+    # finding all uniques that are unknown to train
     uniques_lists = dict()
     for col in columns:
         all_elemets = set(merged_data[col].unique())
         uniques_lists[col] = all_elemets.difference(set(train[col].unique()))
-
+    # fining most cuummon in each column (in train)
     most_cummon = list()
     for col in columns:
         most_cummon.append(train[col].value_counts().idxmax())
     most_cummon = tuple(most_cummon)
-
-
+    # creating rows to add
     rows_to_add = []
     for i,col in enumerate(columns):
         for unique in uniques_lists[col]:
             rows_to_add.append(most_cummon[:i] + (unique,) + most_cummon[i+1:] )
+    # adding new rows with that unknown unique and rest are most cummon uniques to train
+    return train.append(pd.DataFrame(rows_to_add, columns=columns))
 
-    train = train.append(pd.DataFrame(rows_to_add, columns=columns))
-    # bulding encoder
-    merged_data_without_class = merged_data.drop('class',1)
-    encoder = OrdinalEncoder()
-    encoder.fit(merged_data_without_class)
-    # seperating classification column from datasets
-    train_without_class= train.drop('class',1)
-    test_without_class = test.drop('class',1)
-    train_classifications = train['class']
-    test_classifications = test['class']
-    # encoding them all
-    encoded_train_without_class = encoder.transform(train_without_class)
-    encoded_test_without_class = encoder.transform(test_without_class)
-    encoded_train_classifications = train_classifications.map({'yes':1,'no':0})
-    encoded_test_classifications = test_classifications.map({'yes':1,'no':0})
-    # building classifer
-    clf = CategoricalNB(alpha=1) # when alpha=1 its Laplace smoothing
-    clf.fit(encoded_train_without_class, encoded_train_classifications)
-    # pridicting with the tree
-    predictions = clf.predict(encoded_test_without_class )
+def create_return_dict(predictions,encoded_test_classifications):
     # buildding matrix and cakculating score
     correct = 0
     TP,TN,FP,FN = 0,0,0,0
@@ -69,3 +49,34 @@ def naive_bayes_adapter(**kwargs):
             'TN':TN,
             'FP':FP,
             'FN':FN}
+
+def naive_bayes_adapter(**kwargs):
+    # getting data from kwargs
+    train = kwargs['train']
+    test = kwargs['test']
+    # megreing data to get all uniques and to build encoder for all
+    merged_data = pd.concat([train,test])
+    # adding unknown uniques to train dataframe 
+    # by adding new row with that unknown unique and rest are most cummon uniques
+    train = improove_train(train, merged_data)
+    # bulding encoder
+    merged_data_without_class = merged_data.drop('class',1)
+    encoder = OrdinalEncoder()
+    encoder.fit(merged_data_without_class)
+    # seperating classification column from datasets
+    train_without_class= train.drop('class',1)
+    test_without_class = test.drop('class',1)
+    train_classifications = train['class']
+    test_classifications = test['class']
+    # encoding them all
+    encoded_train_without_class = encoder.transform(train_without_class)
+    encoded_test_without_class = encoder.transform(test_without_class)
+    encoded_train_classifications = train_classifications.map({'yes':1,'no':0})
+    encoded_test_classifications = test_classifications.map({'yes':1,'no':0})
+    # building classifer
+    clf = CategoricalNB(alpha=1) # when alpha=1 its Laplace smoothing
+    clf.fit(encoded_train_without_class, encoded_train_classifications)
+    # pridicting with the tree
+    predictions = clf.predict(encoded_test_without_class )
+    # returning matrix and cakculating score
+    return create_return_dict(predictions,encoded_test_classifications) 
