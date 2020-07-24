@@ -105,13 +105,13 @@ def execute_update_kwargs( function , **kwargs):
 # (functions)                                              
 # i just composed some of the functions with the preprocessor for future simpler calls...
 functions = {
-    'our_id3'        : lambda **kwargs: OUR_ID3(**execute_update_kwargs(PREPROCESS, **kwargs)),
-    'id3'            : lambda **kwargs: ID3(**execute_update_kwargs(PREPROCESS, **kwargs)),
-    'naive_bayes'    : lambda **kwargs: NAIVE_BAYES(**execute_update_kwargs(PREPROCESS, **kwargs)),
-    'our_naive_bayes': lambda **kwargs: OUR_NAIVE_BAYES(**execute_update_kwargs(PREPROCESS, **kwargs)),
+    'our_id3'        : lambda **kwargs: OUR_ID3(**execute_update_kwargs(PREPROCESS, **kwargs['8020'](**kwargs))),
+    'id3'            : lambda **kwargs: ID3(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**kwargs))),
+    'naive_bayes'    : lambda **kwargs: NAIVE_BAYES(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**kwargs) )),
+    'our_naive_bayes': lambda **kwargs: OUR_NAIVE_BAYES(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**kwargs) )),
     # knn/ kmeans has its own preprossesing
-    'knn'            : lambda **kwargs: K_NN(**kwargs),  
-    'k_means'        : lambda **kwargs: K_MEANS(**kwargs)
+    'knn'            : lambda **kwargs: K_NN(**kwargs['8020'](**kwargs)),  
+    'k_means'        : lambda **kwargs: K_MEANS(**kwargs['8020'](**kwargs))
 }
 
 #                                                
@@ -683,7 +683,7 @@ def create_classif_panel(parent, resources):
                          button_actions['classif']['k_means'],
                          turn_buttons_down))
     # k/tolorance scroller
-    make_scaler(classif_panel, (24,100), 0, 100,('k','tolorance') )
+    make_scaler(classif_panel, (24,100), 1, 100,('k','tolorance') )
     return classif_panel
 
 
@@ -790,7 +790,7 @@ def create_run_panel(parent, resources):
     def update_output(**kwargs):
         setStatus('Working...')
         function = kwargs['choosen_function']
-        result = function(**kwargs['8020'](**kwargs))
+        result = function(**kwargs)
         setScore(result['score'])
         output_components['TP_box'].config(text = result['TP'])
         output_components['TN_box'].config(text = result['TN'])
