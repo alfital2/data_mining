@@ -93,20 +93,20 @@ def Preprocessing_adapter(**kwargs):
     return {'test': inst.test_df, 'train': inst.train_df}
 
 
-###########
-tmp = open("Structure.txt", "r")
-structure_file = []
-for line in tmp:
-    structure_file.append(line)
-tmp.close()
-train = pd.read_csv("train.csv")
-test = pd.read_csv("test.csv")
-########################
-
-kwargs={'train' : train, 'test':test, 'structure' :structure_file,  'number_of_bins': 3,
-        'missing_values' : 'replace', 'strategy':'equal_frequency' }
-#Preprocess = Preprocessing(train, test, structure_file, True, 'equal_frequency', 3)
-# Preprocess = Preprocessing(train, test, structure_file, "replace", 'equal_width', 3)
-
-Preprocess = Preprocessing(**kwargs)
-print(Preprocess.train_df['duration'][19])
+# ###########
+# tmp = open("Structure.txt", "r")
+# structure_file = []
+# for line in tmp:
+#     structure_file.append(line)
+# tmp.close()
+# train = pd.read_csv("train.csv")
+# test = pd.read_csv("test.csv")
+# ########################
+#
+# kwargs={'train' : train, 'test':test, 'structure' :structure_file,  'number_of_bins': 3,
+#         'missing_values' : 'replace', 'strategy':'equal_frequency' }
+# #Preprocess = Preprocessing(train, test, structure_file, True, 'equal_frequency', 3)
+# # Preprocess = Preprocessing(train, test, structure_file, "replace", 'equal_width', 3)
+#
+# Preprocess = Preprocessing(**kwargs)
+# print(Preprocess.train_df['duration'][19])
