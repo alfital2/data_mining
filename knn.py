@@ -29,11 +29,11 @@ def run(**kwargs ):  # run(files, mode, bins, k=5):
 
 
 def create_conclusions_dictionary(report, matrix):
-    return {'score': report['accuracy'],
-            'TP': matrix[0][0],
-            'TN': matrix[1][1],
-            'FP': matrix[0][1],
-            'FN': matrix[1][0]
+    return {'score': report['accuracy']*100,
+            'TP': matrix[1][1],
+            'TN': matrix[0][0],
+            'FP': matrix[1][0],
+            'FN': matrix[0][1]
             }
 
 
