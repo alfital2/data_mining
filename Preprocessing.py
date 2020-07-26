@@ -1,16 +1,16 @@
 import pandas as pd
 import numpy as np
-
-
+# replace_nans
+# remove_nans
 class Preprocessing():
 
-    def __init__(self,**kwargs):
+    def __init__(self,train, test, structure, number_of_bins, bin_type, deal_with_missing):
         self.bins_dict_range = {}
-        self.train_df = kwargs['train']
-        self.test_df = kwargs['test']
-        self.structure_dict_file = self.list_of_strings_to_dict(kwargs['structure'])
-        self.discretization(self.train_df,kwargs['missing_values'] , kwargs['strategy'], kwargs['number_of_bins'])
-        self.discretization_test(self.test_df, kwargs['missing_values'] , kwargs['strategy'])
+        self.train_df = train
+        self.test_df = test
+        self.structure_dict_file = self.list_of_strings_to_dict(structure)
+        self.discretization(self.train_df,deal_with_missing , bin_type, number_of_bins)
+        self.discretization_test(self.test_df, deal_with_missing, bin_type)
 
     def init_data_frames(self, csv_file_name):
         return pd.read_csv(csv_file_name).applymap(lambda s: s.lower() if type(s) == str else s)
@@ -37,9 +37,9 @@ class Preprocessing():
             self.equal_width_or_frequency(data, pd.qcut, number_of_bins)
 
     def Nones_action(self,data,Nones):
-        if Nones == "remove":
+        if Nones == "remove_nans":
             self.__dropNans(data)
-        elif Nones == "replace":
+        elif Nones == "replace_nans":
             self.__replaceNans(data)
 
     def equal_width_or_frequency(self, data, func, number_of_bins):
@@ -87,9 +87,10 @@ def Preprocessing_adapter(**kwargs):
     train = kwargs['train']
     test = kwargs['test']
     structure = kwargs['structure']
-    numBins = kwargs['number_of_bins']
-    Nones = kwargs['missing_values']
-    inst = Preprocessing(train, test, structure, Nones, numBins)
+    number_of_bins = kwargs['number_of_bins']
+    bin_type = kwargs['bin_type']
+    deal_with_missing = kwargs['missing_values']
+    inst = Preprocessing(train, test, structure, number_of_bins, bin_type, deal_with_missing)
     return {'test': inst.test_df, 'train': inst.train_df}
 
 
