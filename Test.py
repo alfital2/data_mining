@@ -58,5 +58,5 @@ functions = {
 
 # test run example:
 print(
-functions['k_means'](**kwargs)
+functions['id3'](**kwargs)
 )
