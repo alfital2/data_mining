@@ -249,7 +249,7 @@ arg_dict = { 'test':None,
              'number_of_bins':None,
              'k':None,
              'tolorance':None,
-             'bin_type':None,
+             'bin_type':None, # equal_width /equal_frequency/ entropy
              'missing_values': 'remove_nans',  # removing nans by default
              'choosen_function':None,
              'choosen_function_name':None,
