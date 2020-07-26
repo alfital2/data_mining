@@ -83,12 +83,12 @@ K_MEANS         = km.run
 PREPROCESS      = pr.Preprocessing_adapter
 ############################### for testing ##########################################################
 OUR_ID3         =lambda **kwargs : { 'score':111 , 'TP':111 , 'TN':111 ,'FP':111,'FN':111}
-ID3             =lambda **kwargs : { 'score':222 , 'TP':222 , 'TN':222 ,'FP':222 ,'FN':222 }
+# ID3             =lambda **kwargs : { 'score':222 , 'TP':222 , 'TN':222 ,'FP':222 ,'FN':222 }
 OUR_NAIVE_BAYES =lambda **kwargs : { 'score':333 , 'TP':333 , 'TN':333 ,'FP':333 ,'FN':333 }
-NAIVE_BAYES     =lambda **kwargs : { 'score':444 , 'TP':444 , 'TN':444 ,'FP':444 ,'FN':444 }
-K_NN            =lambda **kwargs : { 'score':555 , 'TP':555 , 'TN':555 ,'FP':555 ,'FN':555 }
-K_MEANS         =lambda **kwargs : { 'score':666 , 'TP':666 , 'TN':666 ,'FP':666 ,'FN':666 }
-PREPROCESS      =lambda **kwargs : { 'score':777 , 'TP':777 , 'TN':777 ,'FP':777 ,'FN':777 }
+# NAIVE_BAYES     =lambda **kwargs : { 'score':444 , 'TP':444 , 'TN':444 ,'FP':444 ,'FN':444 }
+# K_NN            =lambda **kwargs : { 'score':555 , 'TP':555 , 'TN':555 ,'FP':555 ,'FN':555 }
+# K_MEANS         =lambda **kwargs : { 'score':666 , 'TP':666 , 'TN':666 ,'FP':666 ,'FN':666 }
+# PREPROCESS      =lambda **kwargs : { 'score':777 , 'TP':777 , 'TN':777 ,'FP':777 ,'FN':777 }
 ####################################################################################################
 
 def load_structure():
@@ -129,8 +129,6 @@ def pass_kwargs(**kwargs):
 
 def split_8020(**kwargs):
     df = kwargs['train']
-    # train = df.sample(frac=0.8,random_state=200) #random state is a seed value
-    # test = df.drop(train.index)
     train, test = train_test_split(df, test_size=0.2, random_state=42, shuffle=True)
     
     train.dropna(inplace=True)
@@ -386,4 +384,4 @@ df5 = create_split_test('knn')
 # k means
 df6 = create_split_test('k_means')
 # all to one csv
-df_to_csv(pd.concat([df1,df2,df3,df4,df5,df6]), 'test_log/binning_strategy_test.csv')
+df_to_csv(pd.concat([df1,df2,df3,df4,df5,df6]), 'test_log/8020_vs_test_test.csv')
