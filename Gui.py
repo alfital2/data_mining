@@ -4,15 +4,9 @@ from tkinter import ttk
 from PIL import ImageTk,Image
 from tkinter import filedialog, messagebox, font
 from sklearn.model_selection import train_test_split
-import time
 import threading 
 import pandas as pd
-import Preprocessing as pr
-import knn  as knn
-import our_id3 as our_id3
-import id3 as id3
-import naive_bayes as naive_bayes
-import kmeans as km
+from start import get_result
 '''
         _                 _   
        | |               | |  
@@ -65,56 +59,6 @@ to do list:
 - delete temporary foo function
 - all done? working well? now delete this comment
 '''
-################### delete me ######################################
-#     ___                              my name is foo              # 
-#   / _/__    ___                                                  # 
-#  / _/ _  \/ _  \       i am a place holder                       # 
-# /_/ \___/ \___/          antil replaced by modules               # 
-def foo (**kwargs):                                                # 
-    print(kwargs)                                                  # 
-    time.sleep(2)                                                  # 
-    return { 'score':100 , 'TP':100 , 'TN':200 ,'FP':10 ,'FN':20 } #
-####################################################################
-
-#     __                                           _       _           
-#    / _|                                         | |     | |          
-#   | |_ _ __ ___  _ __ ___    _ __ ___   ___   __| |_   _| | ___  ___ 
-#   |  _| '__/ _ \| '_ ` _ \  | '_ ` _ \ / _ \ / _` | | | | |/ _ \/ __|
-#   | | | | | (_) | | | | | | | | | | | | (_) | (_| | |_| | |  __/\__ \
-#   |_| |_|  \___/|_| |_| |_| |_| |_| |_|\___/ \__,_|\__,_|_|\___||___/
-#                                                                      
-# (from modules)                                                                  
-OUR_ID3         = our_id3.our_id3_adapter
-ID3             = id3.id3_adapret
-OUR_NAIVE_BAYES = foo
-NAIVE_BAYES     = naive_bayes.naive_bayes_adapter
-K_NN            = knn.run 
-K_MEANS         = km.run
-PREPROCESS      = pr.Preprocessing_adapter
-# TODO end ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-def execute_update_kwargs( function , **kwargs):
-    return {**kwargs,**function(**kwargs)} # old kwags are updated by the returen dict from  the function
-
-#     __                  _   _                 
-#    / _|                | | (_)                
-#   | |_ _   _ _ __   ___| |_ _  ___  _ __  ___ 
-#   |  _| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
-#   | | | |_| | | | | (__| |_| | (_) | | | \__ \
-#   |_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
-# (functions)                                              
-# i just composed some of the functions with the preprocessor for future simpler calls...
-functions = {
-    'our_id3'        : lambda **kwargs: OUR_ID3(**execute_update_kwargs(PREPROCESS, **kwargs['8020'](**kwargs))),
-    'id3'            : lambda **kwargs: ID3(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**kwargs))),
-    'naive_bayes'    : lambda **kwargs: NAIVE_BAYES(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**kwargs) )),
-    'our_naive_bayes': lambda **kwargs: OUR_NAIVE_BAYES(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**kwargs) )),
-    # knn/ kmeans has its own preprossesing
-    'knn'            : lambda **kwargs: K_NN(**kwargs['8020'](**kwargs)),  
-    'k_means'        : lambda **kwargs: K_MEANS(**kwargs['8020'](**kwargs))
-}
-
-#                                                
 #                                                
 #    _ __ ___  ___  ___  _   _ _ __ ___ ___  ___ 
 #   | '__/ _ \/ __|/ _ \| | | | '__/ __/ _ \/ __|
@@ -242,18 +186,17 @@ def getResources():
 #    \__,_|_|  \__, |   \__,_|_|\___|\__|
 #               __/ |_____               
 #              |___/______|     
-# (arg dict)
-arg_dict = { 'test':None,
-             'train':None,
-             'structure':None,
-             'number_of_bins':None,
-             'k':None,
-             'tolorance':None,
-             'bin_type':None, # equal_width /equal_frequency/ entropy
-             'missing_values': 'remove_nans',  # removing nans by default
-             'choosen_function':None,
-             'choosen_function_name':None,
-             '8020':None
+# (arg dict) this dictionary is updated by the ui and when pressed start is sended to start module
+arg_dict = { 'test':None,                      # pd.DataFrame
+             'train':None,                     # pd.DataFrame
+             'structure':None,                 # list of lines (Strings)
+             'number_of_bins':None,            # integer
+             'k':None,                         # integer 
+             'tolorance':None,                 # integer 
+             'bin_type':None,                  # 'equal_width' /'equal_frequency'/ 'entropy'
+             'missing_values': 'remove_nans',  # 'remove_nans'/ 'replace_nans'
+             'choosen_function_name':None,     # 'id3' /
+             '8020':None                       # 'yes' / 'no'
     }
 
 #                           _       _ _      _   
@@ -264,13 +207,14 @@ arg_dict = { 'test':None,
 #   | .__/ \__,_|_| |_|\___|_|  \__,_|_|\___|\__|
 #   | |                                          
 #   |_|                                          
-# (panel dict)
+# (panel dict) this dictionary is to update the visability of the panels
 panel_dict = {
         'prepro':None,
         'classif':None,
         'run':None,
     }
 
+# panel location and size setting
 panel_location_and_size = {
     'prepro': {'location': (160, 320),
                'size': (670, 400)},
@@ -304,18 +248,19 @@ button_actions = {
             '8020'           : lambda  : toggle_8020(),
         },
         "classif":{
-            'our_naive_bayes': lambda  : toggle_choosen_function(functions['our_naive_bayes'],'our_naive_bayes'),
-            'naive_bayes'    : lambda  : toggle_choosen_function(functions['naive_bayes'],'naive_bayes'),
-            'our_id3'        : lambda  : toggle_choosen_function(functions['our_id3'],'our_id3'),
-            'id3'            : lambda  : toggle_choosen_function(functions['id3'],'id3'),
-            'knn'            : lambda  : toggle_choosen_function(functions['knn'],'knn'),
-            'k_means'        : lambda  : toggle_choosen_function(functions['k_means'],'k_means'),
+            'our_naive_bayes': lambda  : toggle_choosen_function('our_naive_bayes'),
+            'naive_bayes'    : lambda  : toggle_choosen_function('naive_bayes'),
+            'our_id3'        : lambda  : toggle_choosen_function('our_id3'),
+            'id3'            : lambda  : toggle_choosen_function('id3'),
+            'knn'            : lambda  : toggle_choosen_function('knn'),
+            'k_means'        : lambda  : toggle_choosen_function('k_means'),
         }, 
         "run":{
             'start' : '( function for the start button composed down in the run panel )',
             'save'  : lambda e : save_to_file(arg_dict,output_components)
         },
     }
+
 def reformat_file_rout( string):
     total_path = string.split('/')
     return total_path[len(total_path) - 1]
@@ -363,12 +308,10 @@ def toggle_bin_type(bin_type):
     else:
         arg_dict['bin_type'] = bin_type
 
-def toggle_choosen_function(function,function_name):
-    if(arg_dict['choosen_function'] == function):
-        arg_dict['choosen_function'] = None
+def toggle_choosen_function(function_name):
+    if(arg_dict['choosen_function_name'] == function_name):
         arg_dict['choosen_function_name'] = None
     else:
-        arg_dict['choosen_function'] = function
         arg_dict['choosen_function_name'] = function_name
 
 def save_to_file(arg_dict,output_components):
@@ -388,27 +331,12 @@ def save_to_file(arg_dict,output_components):
     else:
         output_components['satus_box'].config(text = 'Nothing to save')
 
-def pass_kwargs(**kwargs):
-    return kwargs
-
-def split_8020(**kwargs):
-
-    df = kwargs['train']
-    # train = df.sample(frac=0.8,random_state=200) #random state is a seed value
-    # test = df.drop(train.index)
-    train, test = train_test_split(df, test_size=0.2, random_state=42, shuffle=True)
-    
-    train.dropna(inplace=True)
-    test.dropna(inplace=True)
-
-    return {**kwargs,**{'train':train, 'test': test }}
 
 def toggle_8020():
-    if(arg_dict['8020'] == pass_kwargs):
-        arg_dict['8020'] = split_8020
+    if(arg_dict['8020'] == 'yes'):
+        arg_dict['8020'] = 'no'
     else:
-        arg_dict['8020'] = pass_kwargs
-
+        arg_dict['8020'] = 'yes'
 
 def create_button(perent, location, image ,function ,enter_color="#2b2d42" ,leave_color="gray", bg_color="gray"):
     def on_enter(e):
@@ -566,7 +494,7 @@ def create_prepro_panel(parent, resources):
                          lambda: None)
 
     # 80 / 20 button
-    arg_dict['8020'] = pass_kwargs
+    arg_dict['8020'] = 'no'
     create_lever_button(prepro_panel,
                          resources['prepro']['8020_off']['image'],
                          resources['prepro']['8020_on']['image'],
@@ -770,7 +698,7 @@ def create_run_panel(parent, resources):
         if(not isinstance(arg_dict['train'], pd.DataFrame)):
             setStatus('Load train')
         elif(not isinstance(arg_dict['test'], pd.DataFrame)
-            and arg_dict['8020'] == pass_kwargs):
+            and arg_dict['8020'] == 'no'):
             setStatus('Load test')
         elif(arg_dict['structure'] == None ):
             setStatus('Load structure')
@@ -782,15 +710,18 @@ def create_run_panel(parent, resources):
             setStatus('Choose bin type')
         elif(arg_dict['missing_values'] is None):
             setStatus('Missing values error')
-        elif(arg_dict['choosen_function'] is None):
+        elif(arg_dict['choosen_function_name'] is None):
             setStatus('Choose classifier')
         else:
             setStatus('fdls go')
 
     def update_output(**kwargs):
         setStatus('Working...')
-        function = kwargs['choosen_function']
-        result = function(**kwargs)
+        function_name = kwargs['choosen_function_name']
+        ###  sending kwargs to start module
+        ###      vvvvvvvvvvvv
+        result = get_result(function_name,**kwargs)
+        ###     ^^^^^^^^^^^^^
         setScore(result['score'])
         output_components['TP_box'].config(text = result['TP'])
         output_components['TN_box'].config(text = result['TN'])
@@ -801,13 +732,7 @@ def create_run_panel(parent, resources):
     def start(e):
         F_D_L_S()
         if(output_components['satus_box']['text'] == 'fdls go'):
-            # creating kwargs - making clone of test,train,structure
-            kwargs = {**arg_dict, **{'train': arg_dict['train'].copy(deep=True)
-                                    , 'structure': [x for x in list(arg_dict['structure'])]}
-                      }
-            if(arg_dict['8020'] == pass_kwargs):
-                kwargs = {**kwargs , **{'test':arg_dict['test'].copy(deep=True)}}
-            threading.Thread(target=update_output, kwargs=kwargs).start()
+            threading.Thread(target=update_output, kwargs=arg_dict).start()
 
     # start button
     create_button(run_panel, resources['run']['start']['location'],

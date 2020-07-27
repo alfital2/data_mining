@@ -1,15 +1,8 @@
 
-import Preprocessing
-import Preprocessing as pr
-from sklearn.model_selection import train_test_split
-import knn  as knn
-import time
+from start import get_result
 import pandas as pd
 import numpy as np
-import our_id3 as our_id3
-import id3 as id3
-import naive_bayes as naive_bayes
-import kmeans as km
+
 '''
                  bbbbbbbb                                                                    
                  b::::::b                                                      tttt          
@@ -39,8 +32,7 @@ content:
 *******
 utility:
     In section we have function that help us to connect all
-    like file opening functions, csv creating function, the imported classifayer function
-    are also setted up here and composed at the right order.
+    like file opening functions, csv creating function.
     
 tests:
     In this section we have:
@@ -74,23 +66,6 @@ u:::::::::::::::uu    t::::::tttt:::::ti::::::il::::::li::::::i     t::::::tttt:
                                                                                     y:::::y               
                                                                                    yyyyyyy   
 '''
-OUR_ID3         = our_id3.our_id3_adapter
-ID3             = id3.id3_adapret
-OUR_NAIVE_BAYES = lambda **kwargs : { 'score':100 , 'TP':100 , 'TN':200 ,'FP':10 ,'FN':20 }
-NAIVE_BAYES     = naive_bayes.naive_bayes_adapter
-K_NN            = knn.run 
-K_MEANS         = km.run
-PREPROCESS      = pr.Preprocessing_adapter
-############################### for testing ##########################################################
-OUR_ID3         =lambda **kwargs : { 'score':111 , 'TP':111 , 'TN':111 ,'FP':111,'FN':111}
-# ID3             =lambda **kwargs : { 'score':222 , 'TP':222 , 'TN':222 ,'FP':222 ,'FN':222 }
-OUR_NAIVE_BAYES =lambda **kwargs : { 'score':333 , 'TP':333 , 'TN':333 ,'FP':333 ,'FN':333 }
-# NAIVE_BAYES     =lambda **kwargs : { 'score':444 , 'TP':444 , 'TN':444 ,'FP':444 ,'FN':444 }
-# K_NN            =lambda **kwargs : { 'score':555 , 'TP':555 , 'TN':555 ,'FP':555 ,'FN':555 }
-# K_MEANS         =lambda **kwargs : { 'score':666 , 'TP':666 , 'TN':666 ,'FP':666 ,'FN':666 }
-# PREPROCESS      =lambda **kwargs : { 'score':777 , 'TP':777 , 'TN':777 ,'FP':777 ,'FN':777 }
-####################################################################################################
-
 def load_structure():
     returnList = []
     filename = 'Structure.txt'
@@ -103,38 +78,6 @@ def load_structure():
         print("Error", "file was not found!!")
     return returnList
         
-def copy_kwargs(**arg_dict):
-    kwargs = {**arg_dict, **{'train': arg_dict['train'].copy(deep=True)
-                            , 'structure': [x for x in list(arg_dict['structure'])]}
-                }
-    if(arg_dict['8020'] == pass_kwargs):
-        kwargs = {**kwargs , **{'test':arg_dict['test'].copy(deep=True)}}
-    return kwargs
-
-def execute_update_kwargs( function , **kwargs):
-    return {**kwargs,**function(**kwargs)} # old kwags are updated by the returen dict from  the function
-
-functions = {
-    'our_id3'        : lambda **kwargs: OUR_ID3(**execute_update_kwargs(PREPROCESS, **kwargs['8020'](**copy_kwargs(**kwargs)))),
-    'id3'            : lambda **kwargs: ID3(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**copy_kwargs(**kwargs)))),
-    'naive_bayes'    : lambda **kwargs: NAIVE_BAYES(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**copy_kwargs(**kwargs)))),
-    'our_naive_bayes': lambda **kwargs: OUR_NAIVE_BAYES(**execute_update_kwargs(PREPROCESS,**kwargs['8020'](**copy_kwargs(**kwargs)) )),
-    # knn/ kmeans has its own preprossesing
-    'knn'            : lambda **kwargs: K_NN(**kwargs['8020'](**copy_kwargs(**kwargs))),  
-    'k_means'        : lambda **kwargs: K_MEANS(**kwargs['8020'](**copy_kwargs(**kwargs)))
-}
-
-def pass_kwargs(**kwargs):
-    return kwargs
-
-def split_8020(**kwargs):
-    df = kwargs['train']
-    train, test = train_test_split(df, test_size=0.2, random_state=42, shuffle=True)
-    
-    train.dropna(inplace=True)
-    test.dropna(inplace=True)
-    return {**kwargs,**{'train':train, 'test': test }}
-                
 def df_to_csv (df, filename):
     df.to_csv(filename, encoding='utf-8', index=False)
 
@@ -169,7 +112,7 @@ DEFAULT_NUMBER_OF_BINS = 10
 DEFAULT_BIN_TYPE = 'equal_width'
 DEFAULT_TOLORANCE = 5
 DEFAULT_K= 5
-DEFAULT_8020 = split_8020
+DEFAULT_8020 = 'yes'
 DEFAULT_MISSING_VALUES = 'remove_nans'
 
 # for id3 and our_id3
@@ -186,7 +129,7 @@ def create_t_test(function_name, tolorance_array):
                 }
     resuluts = []
     for t in tolorance_array:
-        result = functions[function_name](**{**arg_dict, **{'tolorance': t}})
+        result = get_result(function_name,**{**arg_dict, **{'tolorance': t}})
         result_tupple = (result['score'], result['TP'],
                          result['TN'], result['FP'], result['FN'], t)
         resuluts.append(result_tupple)
@@ -207,7 +150,7 @@ def create_k_test(function_name, k_array):
                 }
     resuluts = []
     for k in k_array:
-        result = functions[function_name]( **{**arg_dict,**{'k':k}} )
+        result = get_result(function_name, **{**arg_dict,**{'k':k}})
         result_tupple = (result['score'],result['TP'],result['TN'],result['FP'],result['FN'],k)
         resuluts.append(result_tupple) 
     columns = ( 'score','TP','TN','FP','FN','k')
@@ -227,7 +170,7 @@ def create_bins_number_test(function_name, bins_array):
                 }
     resuluts = []
     for b in bins_array:
-        result = functions[function_name]( **{**arg_dict,**{'number_of_bins':b}} )
+        result = get_result(function_name, **{**arg_dict,**{'number_of_bins':b}})
         result_tupple = (function_name, result['score'],result['TP'],result['TN'],result['FP'],result['FN'],b)
         resuluts.append(result_tupple) 
     columns = ( 'function', 'score','TP','TN','FP','FN','number of bins')
@@ -247,7 +190,7 @@ def create_nans_test ( function_name ):
                 }
     resuluts = []
     for s in ('remove_nans','replace_nans'):
-        result = functions[function_name]( **{**arg_dict,**{'missing_values':s}} )
+        result = get_result(function_name, **{**arg_dict,**{'missing_values':s}})
         result_tupple = (function_name, result['score'],result['TP'],result['TN'],result['FP'],result['FN'],s)
         resuluts.append(result_tupple) 
     columns = ( 'function', 'score','TP','TN','FP','FN','dealing with nans strategy')
@@ -267,10 +210,10 @@ def create_bining_strategy_test( function_name ):
                 }
     resuluts = []
     for s in ('equal_width ','equal_frequency', 'entropy'):
-        result = functions[function_name]( **{**arg_dict,**{'missing_values':s}} )
+        result = get_result(function_name, **{**arg_dict,**{'bin_type':s}})
         result_tupple = (function_name, result['score'],result['TP'],result['TN'],result['FP'],result['FN'],s)
         resuluts.append(result_tupple) 
-    columns = ('function','score','TP','TN','FP','FN','biining strategy')
+    columns = ('function','score','TP','TN','FP','FN','bining strategy')
     return matrix_to_df(columns, resuluts)
 
 def create_split_test ( function_name ):
@@ -285,8 +228,8 @@ def create_split_test ( function_name ):
                 '8020': DEFAULT_8020
                 }
     resuluts = []
-    for s in ('split_8020','pass_kwargs'):
-        result = functions['id3']( **{**arg_dict,**{'8020':eval(s)}} )
+    for s in ('yes','no'):
+        result = get_result(function_name, **{**arg_dict,**{'8020':s}})
         result_tupple = (function_name,result['score'],result['TP'],result['TN'],result['FP'],result['FN'],s)
         resuluts.append(result_tupple) 
     columns = ('function','score','TP','TN','FP','FN','number of bins')
@@ -316,7 +259,7 @@ DDDDDDDDDDDDD         rrrrrrr           iiiiiiii          vvv            eeeeeee
 # id3
 df_to_csv(create_t_test('id3', (1, 2, 3)), 'test_log/id3_t_test.csv')
 # our_id3
-df_to_csv(create_t_test('our_id3', (1, 2, 3)), 'test_log/our_id3_t_test.csv')
+# df_to_csv(create_t_test('our_id3', (1, 2, 3)), 'test_log/our_id3_t_test.csv')# TODO eneble me
 
 
 # k test
@@ -331,11 +274,13 @@ df_to_csv(create_k_test('k_means', (1, 2, 3)),'test_log/k_means_k_test.csv')
 # id3
 df1 = create_bins_number_test( 'id3', (1, 2, 3))
 # our id3
-df2 = create_bins_number_test( 'our_id3', (1, 2, 3))
+# df2 = create_bins_number_test( 'our_id3', (1, 2, 3))# TODO eneble me
+df2 = pd.DataFrame()
 # naive bayes
 df3 = create_bins_number_test( 'naive_bayes', (1, 2, 3))
 # our naive bayes
-df4 = create_bins_number_test( 'our_naive_bayes', (1, 2, 3))
+# df4 = create_bins_number_test( 'our_naive_bayes', (1, 2, 3))# TODO eneble me
+df4 = pd.DataFrame()
 # all to one csv
 df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/bins_number_test.csv')
 
@@ -344,11 +289,13 @@ df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/bins_number_test.csv')
 # id3
 df1 = create_nans_test( 'id3' )
 # our id3
-df2 = create_nans_test( 'our_id3')
+# df2 = create_nans_test( 'our_id3')# TODO eneble me
+df2 = pd.DataFrame()
 # naive bayes
 df3 = create_nans_test( 'naive_bayes')
 # our naive bayes
-df4 = create_nans_test( 'our_naive_bayes')
+# df4 = create_nans_test( 'our_naive_bayes')# TODO eneble me
+df4 = pd.DataFrame()
 # knn 
 df5 = create_nans_test( 'knn')
 # k means
@@ -361,11 +308,13 @@ df_to_csv(pd.concat([df1,df2,df3,df4,df5,df6]), 'test_log/missing_values_test.cs
 # id3
 df1 = create_bining_strategy_test( 'id3' )
 # our id3
-df2 = create_bining_strategy_test( 'our_id3')
+# df2 = create_bining_strategy_test( 'our_id3') # TODO eneble me
+df2 = pd.DataFrame()
 # naive bayes
 df3 = create_bining_strategy_test( 'naive_bayes')
 # our naive bayes
-df4 = create_bining_strategy_test( 'our_naive_bayes')
+# df4 = create_bining_strategy_test( 'our_naive_bayes') # TODO enble me 
+df4 = pd.DataFrame()
 # all to one csv
 df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/binning_strategy_test.csv')
 
@@ -374,11 +323,13 @@ df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/binning_strategy_test.csv')
 # id3
 df1 = create_split_test( 'id3' )
 # our id3
-df2 = create_split_test( 'our_id3')
+# df2 = create_split_test( 'our_id3')# TODO eneble me
+df2 = pd.DataFrame()
 # naive bayes
 df3 = create_split_test( 'naive_bayes')
 # our naive bayes
-df4 = create_split_test( 'our_naive_bayes')
+# df4 = create_split_test( 'our_naive_bayes')# TODO eneble me
+df4 = pd.DataFrame()
 # knn 
 df5 = create_split_test('knn')
 # k means
