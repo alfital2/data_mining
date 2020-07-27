@@ -75,20 +75,7 @@ def run(**kwargs ):
             'FP': nb.matrix[0][1],
             'FN': nb.matrix[1][0]
             }
-######################################Preprocessing
-tmp = open("Structure.txt", "r")
-structure_file = []
 
-for line in tmp:
-    structure_file.append(line)
-tmp.close()
-train = pd.read_csv('train.csv')
-test = pd.read_csv('test.csv')
-my_pre = pr.Preprocessing(train,test,structure_file,15,'equal_width','remove_nans')
-# ######################################
-nb = naiveBayes(my_pre.train_df,my_pre.test_df)
-print(nb.probabilities)
-print(nb.score())
 
 
 
