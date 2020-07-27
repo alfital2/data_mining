@@ -1,0 +1,9 @@
+function,score,TP,TN,FP,FN,dealing with nans strategy
+id3,91.58856329339187,110,7610,56,653,remove_nans
+id3,91.58856329339187,110,7610,56,653,replace_nans
+naive_bayes,91.6360185075335,234,7490,176,529,remove_nans
+naive_bayes,91.6360185075335,234,7490,176,529,replace_nans
+knn,91.20892158025863,193,7495,570,171,remove_nans
+knn,91.20892158025863,193,7495,570,171,replace_nans
+k_means,90.94791790247953,0,7666,0,763,remove_nans
+k_means,90.94791790247953,0,7666,0,763,replace_nans
