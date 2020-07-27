@@ -2,7 +2,9 @@ import pandas as pd
 import Preprocessing as pr
 from sklearn.metrics import confusion_matrix
 
+
 class naiveBayes:
+
 
     def __init__(self, dataSet,testSet, targetCol='class'):
         self.probabilities = {}
@@ -31,12 +33,8 @@ class naiveBayes:
 
     def probability_calc(self,unic, classifier,data_column):
         tmp = zip(data_column, self.dataSet[self.targetCol])
-        # Laplace fix
-        count = 1
-        for elm, Class in tmp:
-            if elm == unic and Class == classifier:
-                count += 1
-        return count / list(self.dataSet[self.targetCol]).count(classifier)
+        return (list(tmp).count((unic, classifier))+1)/\
+               list(self.dataSet[self.targetCol]).count(classifier) #+1 for laplace fix
 
     def prediction(self):
         winner = {}
@@ -44,15 +42,20 @@ class naiveBayes:
         for vector in self.testSet.iloc[:, :-1].itertuples():
             for classifier in set(self.testSet[self.targetCol]):
                 for unic in list(vector[1:]):
-                    if(self.return_probability_from_probability_dictionary(unic,classifier)!=None):
-                        p *= self.return_probability_from_probability_dictionary(unic, classifier)
-
+                    c_p = self.return_probability_from_probability_dictionary(unic,classifier,list(vector[1:]).index(unic))
+                    if(c_p!=None):
+                        p *= c_p
                 winner[p*self.omega[classifier]] = classifier
                 p = 1
             self.prediction_column.append(winner[max(winner.keys())])
             winner = {}
-        print(len(self.prediction_column))
 
+    def return_probability_from_probability_dictionary(self,unic,classifier,column_index):
+        column = list(self.testSet)[column_index]
+        try:
+            return self.probabilities[column][unic][classifier]
+        except KeyError as e:
+            return 1
 
     def score(self):
         correct_decisions = 0
@@ -62,11 +65,7 @@ class naiveBayes:
                 correct_decisions+=1
         return correct_decisions/len(self.testSet)*100
 
-    def return_probability_from_probability_dictionary(self,unic,classifier):
-        for column in self.probabilities.keys():
-            for this_unic in self.probabilities[column].keys():
-                if this_unic == unic:
-                    return self.probabilities[column][unic][classifier]
+
 
 def run(**kwargs ):
     nb = naiveBayes(kwargs['train'], kwargs['test'])
@@ -77,19 +76,21 @@ def run(**kwargs ):
             'FN': nb.matrix[1][0]
             }
 ######################################Preprocessing
-# tmp = open("Structure.txt", "r")
-# structure_file = []
-#
-# for line in tmp:
-#     structure_file.append(line)
-# tmp.close()
-# train = pd.read_csv('train.csv')
-# test = pd.read_csv('test.csv')
-# my_pre = pr.Preprocessing(train,test,structure_file,15,'equal_width','remove_nans')
-# # ######################################
-# nb = naiveBayes(my_pre.train_df,my_pre.test_df)
-# print(nb.score())
-# print(nb.matrix)
+tmp = open("Structure.txt", "r")
+structure_file = []
+
+for line in tmp:
+    structure_file.append(line)
+tmp.close()
+train = pd.read_csv('train.csv')
+test = pd.read_csv('test.csv')
+my_pre = pr.Preprocessing(train,test,structure_file,15,'equal_width','remove_nans')
+# ######################################
+nb = naiveBayes(my_pre.train_df,my_pre.test_df)
+print(nb.probabilities)
+print(nb.score())
+
+
 
 
 
