@@ -1,7 +1,38 @@
 import pandas as pd
 import numpy as np
-# replace_nans
-# remove_nans
+import operator
+from numpy import log2 as log
+eps = np.finfo(float).eps
+
+# entropy binning
+def entropy_bining(data, column, number_of_bins):
+    bin_edges = (data[column].min(), data[column].max())
+
+    pairs = list(zip(data[column].tolist(),data['class'].tolist()))
+    pairs = tuple(pairs.sort(key=operator.itemgetter(0)))
+
+    while len(bin_edges) < number_of_bins+1:
+        pass
+
+    print(bin_edges)
+    exit()
+
+# equal width binning
+def pandas_cut_wrapper(data, column, number_of_bins):
+    binned_column = pd.cut(np.array(data[column]), number_of_bins, duplicates='drop', retbins=True)
+    bins = [x + 1 for x in range(len(binned_column[1]) - 1)]
+    binned_column = pd.cut(np.array(data[column]), number_of_bins, labels=bins, duplicates='drop', retbins=True)
+    return binned_column[0], binned_column[1] 
+
+# equal frequency bining
+def pandas_qcut_wrapper(data, column, number_of_bins):
+    binned_column = pd.qcut(np.array(data[column]), number_of_bins, duplicates='drop', retbins=True)
+    bins = [x + 1 for x in range(len(binned_column[1]) - 1)]
+    binned_column = pd.qcut(np.array(data[column]), number_of_bins, labels=bins, duplicates='drop', retbins=True)
+    return binned_column[0], binned_column[1]
+
+
+
 class Preprocessing():
 
     def __init__(self,train, test, structure, number_of_bins, bin_type, deal_with_missing):
@@ -31,10 +62,15 @@ class Preprocessing():
     def discretization(self, data, Nones, strategy, number_of_bins=None):
         self.Nones_action(data,Nones)
         if strategy == 'equal_width':
-            self.equal_width_or_frequency(data, pd.cut, number_of_bins)
+            self.apply_binning(data, pandas_cut_wrapper, number_of_bins)
 
         elif strategy == 'equal_frequency':
-            self.equal_width_or_frequency(data, pd.qcut, number_of_bins)
+            self.apply_binning(data, pandas_qcut_wrapper, number_of_bins)
+
+        elif strategy == 'entropy':
+            self.apply_binning(data, entropy_bining, number_of_bins)
+        # print(self.bins_dict_range)
+
 
     def Nones_action(self,data,Nones):
         if Nones == "remove_nans":
@@ -42,24 +78,18 @@ class Preprocessing():
         elif Nones == "replace_nans":
             self.__replaceNans(data)
 
-    def equal_width_or_frequency(self, data, func, number_of_bins):
+    def apply_binning(self, data, func, number_of_bins):
         for column in (list(data)[:-1]):
             if self.structure_dict_file[column] == 'NUMERIC':
-                binned_column = func(np.array(data[column]), number_of_bins, duplicates='drop', retbins=True)
-                bins = [x + 1 for x in range(len(binned_column[1]) - 1)]
-                binned_column = func(np.array(data[column]), number_of_bins, labels=bins, duplicates='drop',
-                                     retbins=True)
+                binned_column, bins = func(data, column, number_of_bins)
                 # getting the array of bins the way pandas made it
-                self.bins_dict_range[column] = binned_column[1]
-                self.__replaceCol(binned_column[0], column, data)
+                self.bins_dict_range[column] = bins
+                self.__replaceCol(binned_column, column, data)
                 self.add_inf_values(self.bins_dict_range[column])
 
     def discretization_test(self, data, Nones, strategy):
         self.Nones_action(data,Nones)
-        if strategy == 'equal_width':
-            self.create_new_column_according_bins(data)
-        elif strategy == 'equal_frequency':
-            self.create_new_column_according_bins(data)
+        self.create_new_column_according_bins(data)
 
     def create_new_column_according_bins(self, data):
         for column in (list(data)[:-1]):

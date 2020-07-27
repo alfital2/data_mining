@@ -29,5 +29,5 @@ kwargs = {   'test':pd.read_csv('test.csv'),
 
 # test run example:
 print(
-get_result('our_naive_bayes',**kwargs)
+get_result('id3',**kwargs)
 )
