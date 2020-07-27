@@ -259,7 +259,7 @@ DDDDDDDDDDDDD         rrrrrrr           iiiiiiii          vvv            eeeeeee
 # id3
 df_to_csv(create_t_test('id3', (1, 2, 3)), 'test_log/id3_t_test.csv')
 # our_id3
-# df_to_csv(create_t_test('our_id3', (1, 2, 3)), 'test_log/our_id3_t_test.csv')# TODO eneble me
+df_to_csv(create_t_test('our_id3', (1, 2, 3)), 'test_log/our_id3_t_test.csv')
 
 
 # k test
@@ -274,13 +274,11 @@ df_to_csv(create_k_test('k_means', (1, 2, 3)),'test_log/k_means_k_test.csv')
 # id3
 df1 = create_bins_number_test( 'id3', (1, 2, 3))
 # our id3
-# df2 = create_bins_number_test( 'our_id3', (1, 2, 3))# TODO eneble me
-df2 = pd.DataFrame()
+df2 = create_bins_number_test( 'our_id3', (1, 2, 3))
 # naive bayes
 df3 = create_bins_number_test( 'naive_bayes', (1, 2, 3))
 # our naive bayes
-# df4 = create_bins_number_test( 'our_naive_bayes', (1, 2, 3))# TODO eneble me
-df4 = pd.DataFrame()
+df4 = create_bins_number_test( 'our_naive_bayes', (1, 2, 3))
 # all to one csv
 df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/bins_number_test.csv')
 
@@ -289,13 +287,11 @@ df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/bins_number_test.csv')
 # id3
 df1 = create_nans_test( 'id3' )
 # our id3
-# df2 = create_nans_test( 'our_id3')# TODO eneble me
-df2 = pd.DataFrame()
+df2 = create_nans_test( 'our_id3')
 # naive bayes
 df3 = create_nans_test( 'naive_bayes')
 # our naive bayes
-# df4 = create_nans_test( 'our_naive_bayes')# TODO eneble me
-df4 = pd.DataFrame()
+df4 = create_nans_test( 'our_naive_bayes')
 # knn 
 df5 = create_nans_test( 'knn')
 # k means
@@ -308,13 +304,11 @@ df_to_csv(pd.concat([df1,df2,df3,df4,df5,df6]), 'test_log/missing_values_test.cs
 # id3
 df1 = create_bining_strategy_test( 'id3' )
 # our id3
-# df2 = create_bining_strategy_test( 'our_id3') # TODO eneble me
-df2 = pd.DataFrame()
+df2 = create_bining_strategy_test( 'our_id3') 
 # naive bayes
 df3 = create_bining_strategy_test( 'naive_bayes')
 # our naive bayes
-# df4 = create_bining_strategy_test( 'our_naive_bayes') # TODO enble me 
-df4 = pd.DataFrame()
+df4 = create_bining_strategy_test( 'our_naive_bayes') 
 # all to one csv
 df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/binning_strategy_test.csv')
 
@@ -323,13 +317,11 @@ df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/binning_strategy_test.csv')
 # id3
 df1 = create_split_test( 'id3' )
 # our id3
-# df2 = create_split_test( 'our_id3')# TODO eneble me
-df2 = pd.DataFrame()
+df2 = create_split_test( 'our_id3')
 # naive bayes
 df3 = create_split_test( 'naive_bayes')
 # our naive bayes
-# df4 = create_split_test( 'our_naive_bayes')# TODO eneble me
-df4 = pd.DataFrame()
+df4 = create_split_test( 'our_naive_bayes')
 # knn 
 df5 = create_split_test('knn')
 # k means

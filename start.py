@@ -5,19 +5,9 @@ import knn  as knn
 import our_id3 as our_id3
 import id3 as id3
 import naive_bayes as naive_bayes
+import our_naive_bayes as our_nb
 import kmeans as km
 
-
-################### delete me ######################################
-#     ___                              my name is foo              # 
-#   / _/__    ___                                                  # 
-#  / _/ _  \/ _  \       i am a place holder                       # 
-# /_/ \___/ \___/          antil replaced by modules               # 
-def foo (**kwargs):                                                # 
-    print(kwargs)                                                  # 
-    time.sleep(2)                                                  # 
-    return { 'score':100 , 'TP':100 , 'TN':200 ,'FP':10 ,'FN':20 } #
-####################################################################
 #     __                                           _       _           
 #    / _|                                         | |     | |          
 #   | |_ _ __ ___  _ __ ___    _ __ ___   ___   __| |_   _| | ___  ___ 
@@ -28,7 +18,7 @@ def foo (**kwargs):                                                #
 # (from modules)   geting this adapters from other modlues
 OUR_ID3         = our_id3.our_id3_adapter
 ID3             = id3.id3_adapret
-OUR_NAIVE_BAYES = foo
+OUR_NAIVE_BAYES = our_nb.run
 NAIVE_BAYES     = naive_bayes.naive_bayes_adapter
 K_NN            = knn.run 
 K_MEANS         = km.run
