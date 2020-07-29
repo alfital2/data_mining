@@ -19,7 +19,7 @@ def load_structure():
 kwargs = {   'test':pd.read_csv('test.csv'),
              'train':pd.read_csv('train.csv'),
              'structure':load_structure(),
-             'number_of_bins':3,
+             'number_of_bins':19,
              'k':5,
              'tolorance':5,
              'bin_type':'entropy',
@@ -29,5 +29,5 @@ kwargs = {   'test':pd.read_csv('test.csv'),
 
 # test run example:
 print(
-get_result('our_naive_bayes',**kwargs)
+get_result('id3',**kwargs)
 )
