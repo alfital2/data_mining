@@ -1,27 +1,18 @@
 import pandas as pd
 import numpy as np
-import operator
-from numpy import log2 as log
-eps = np.finfo(float).eps
+import entropy_psm as entropy_psm
 
 # entropy binning
 def entropy_bining(data, column, number_of_bins):
-    bin_edges = (data[column].min(), data[column].max())
-
-    pairs = list(zip(data[column].tolist(),data['class'].tolist()))
-    pairs = tuple(pairs.sort(key=operator.itemgetter(0)))
-
-    while len(bin_edges) < number_of_bins+1:
-        pass
-
-    print(bin_edges)
-    exit()
+    # sending to the endtropy bu pure set and megres module
+    return entropy_psm.entropy_bining(data, column, number_of_bins)
 
 # equal width binning
 def pandas_cut_wrapper(data, column, number_of_bins):
-    binned_column = pd.cut(np.array(data[column]), number_of_bins, duplicates='drop', retbins=True)
+
+    binned_column = pd.cut(np.array(data[column]), number_of_bins, include_lowest=True, duplicates='drop', retbins=True)
     bins = [x + 1 for x in range(len(binned_column[1]) - 1)]
-    binned_column = pd.cut(np.array(data[column]), number_of_bins, labels=bins, duplicates='drop', retbins=True)
+    binned_column = pd.cut(np.array(data[column]), number_of_bins, include_lowest=True, labels=bins, duplicates='drop', retbins=True)
     return binned_column[0], binned_column[1] 
 
 # equal frequency bining
