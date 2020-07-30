@@ -78,9 +78,9 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Tal Alfi** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Oleg Belochitsky** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Ziv Friza** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Tal Alfi**
+* **Oleg Belochitsky**
+* **Ziv Friza**
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
