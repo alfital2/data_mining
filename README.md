@@ -8,8 +8,11 @@ also a different preprocessing techniques are implemented
 ## Getting Started
 
 for now the only why to run this application is to run
-Gui.py in any IDE using a compatible interpreter
-
+Gui.py in any IDE using a compatible interpreter for gui interface
+or 
+run single_test for terminal resaults (exmples in "Break down into end to end tests" section)
+or 
+run_log_all for log creation
 ### Prerequisites
 
 acording to the current running mathod you need:
