@@ -101,9 +101,9 @@ get_result('our_naive_bayes',**kwargs)
 
 ## Authors
 
-* **Tal Alfi**
-* **Oleg Belochitsky**
-* **Ziv Friza**
+* **Tal Alfi** 204557052
+* **Oleg Belochitsky** 321192577
+* **Ziv Friza** 312196355
 
 ## License
 
