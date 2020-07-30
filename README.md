@@ -13,76 +13,93 @@ Gui.py in any IDE using a compatible interpreter
 
 acording to the current running mathod you need:
 python 3.7 interpeter (conda version is recomended)
-scikit-lern on version 0.23.1
 and any compitble IDE to run Gui.py
 
+librarys:
+scikit-lern on version 0.23.1
+numpy
+
 ```
-Give examples
+pip install -U scikit-learn
+or 
+conda install scikit-learn
+
+pip install numpy
+or
+conda install numpy
+
+pip install pandas
+or
+conda install pandas
+
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+run Gui.py 
 
 ```
-Give the example
+open Gui.py with PyCharm
+and 
 ```
 
-And repeat
-
 ```
-until finished
+run it using conda interpeter 3.7
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+in preprocessor:
+1.load train,test and structure files or use 20/80 option
+2.choose number of bins
+3.choose bins type
+4.choose how to handle missing elements
+in classifier:
+1.choose classifier
+2.for id3 set t tolerance for max recursion
+in Run:
+run:)
 
 ### Break down into end to end tests
 
-Explain what these tests test and why
+in Run you can view the precision of prediction
+acording your train,test files (or 20/80)
+and view the confusion matrix
+
+mathod ussing single_test.py
 
 ```
-Give an example
+kwargs = {   'test':pd.read_csv('test.csv'),
+             'train':pd.read_csv('train.csv'),
+             'structure':load_structure(),
+             'number_of_bins':3,
+             'k':5,
+             'tolorance':5,
+             'bin_type':'equal_frequency',
+             'missing_values': 'replace_nans',
+             '8020': 'no',
+    }
+
+print(
+get_result('our_naive_bayes',**kwargs)
+)
+
+{'score': 60.34312108215111, 'TP': 708, 'TN': 1121, 'FP': 346, 'FN': 856}
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [PyCharm](https://www.jetbrains.com/pycharm/) - IDE used for this project
+* [vim](https://www.vim.org/) - Dependency IDE used for this project
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
 * **Tal Alfi**
 * **Oleg Belochitsky**
 * **Ziv Friza**
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
@@ -103,9 +120,5 @@ WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEM
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
 
