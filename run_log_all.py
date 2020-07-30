@@ -170,6 +170,7 @@ def create_bins_number_test(function_name, bins_array):
                 }
     resuluts = []
     for b in bins_array:
+        print(b)
         result = get_result(function_name, **{**arg_dict,**{'number_of_bins':b}})
         result_tupple = (function_name, result['score'],result['TP'],result['TN'],result['FP'],result['FN'],b)
         resuluts.append(result_tupple) 
@@ -196,25 +197,28 @@ def create_nans_test ( function_name ):
     columns = ( 'function', 'score','TP','TN','FP','FN','dealing with nans strategy')
     return matrix_to_df(columns, resuluts)
 
+
 # binning strategy test
-def create_bining_strategy_test( function_name ):
+def create_bining_strategy_test(function_name):
     arg_dict = {'test': DEFAULT_TEST,
                 'train': DEFAULT_TRAIN,
                 'structure': DEFAULT_STRUCTURE,
-                'tolorance':DEFAULT_TOLORANCE,
-                'k':DEFAULT_K,
+                'tolorance': DEFAULT_TOLORANCE,
+                'k': DEFAULT_K,
                 'number_of_bins': DEFAULT_NUMBER_OF_BINS,
                 'bin_type': DEFAULT_BIN_TYPE,
                 'missing_values': DEFAULT_MISSING_VALUES,
                 '8020': DEFAULT_8020
                 }
     resuluts = []
-    for s in ('equal_width ','equal_frequency', 'entropy'):
-        result = get_result(function_name, **{**arg_dict,**{'bin_type':s}})
-        result_tupple = (function_name, result['score'],result['TP'],result['TN'],result['FP'],result['FN'],s)
-        resuluts.append(result_tupple) 
-    columns = ('function','score','TP','TN','FP','FN','bining strategy')
+    for strategy in ['equal_width', 'equal_frequency', 'entropy']:
+        result = get_result(
+            function_name, **{**arg_dict, **{'bin_type': strategy}})
+        result_tupple = (function_name, result['score'], result['TP'], result['TN'], result['FP'], result['FN'], strategy)
+        resuluts.append(result_tupple)
+    columns = ('function', 'score', 'TP', 'TN', 'FP', 'FN', 'strategy')
     return matrix_to_df(columns, resuluts)
+
 
 def create_split_test ( function_name ):
     arg_dict = {'test': DEFAULT_TEST,
@@ -257,28 +261,37 @@ DDDDDDDDDDDDD         rrrrrrr           iiiiiiii          vvv            eeeeeee
 # t test
 #########
 # id3
-df_to_csv(create_t_test('id3', (1, 2, 3)), 'test_log/id3_t_test.csv')
+df_to_csv(create_t_test('id3', tuple(i for i in range(1,100))), 'test_log/id3_t_test.csv')
+print('finished id3 t test')
 # our_id3
-df_to_csv(create_t_test('our_id3', (1, 2, 3)), 'test_log/our_id3_t_test.csv')
+df_to_csv(create_t_test('our_id3',tuple(i for i in range(1,10))), 'test_log/our_id3_t_test.csv')
+print('finished our id3 t test')
 
 
 # k test
 #########
 # knn
-df_to_csv(create_k_test('knn', (1, 2, 3)),'test_log/knn_k_test.csv')
+df_to_csv(create_k_test('knn', tuple(i for i in range(1,50))),'test_log/knn_k_test.csv')
+print('finished knn k test')
 # k means
-df_to_csv(create_k_test('k_means', (1, 2, 3)),'test_log/k_means_k_test.csv')
+df_to_csv(create_k_test('k_means', tuple(i for i in range(1,50))),'test_log/k_means_k_test.csv')
+print('finished kmeans k test')
 
 # bins test
 ##################
 # id3
-df1 = create_bins_number_test( 'id3', (1, 2, 3))
+bins_amouns = tuple( i for i in range(5,30,5))
+df1 = create_bins_number_test( 'id3', bins_amouns)
+print('finished id3 bins test')
 # our id3
-df2 = create_bins_number_test( 'our_id3', (1, 2, 3))
+df2 = create_bins_number_test( 'our_id3',  bins_amouns)
+print('finished our id3 bins test')
 # naive bayes
-df3 = create_bins_number_test( 'naive_bayes', (1, 2, 3))
+df3 = create_bins_number_test( 'naive_bayes', bins_amouns)
+print('finished nb bins test')
 # our naive bayes
-df4 = create_bins_number_test( 'our_naive_bayes', (1, 2, 3))
+df4 = create_bins_number_test( 'our_naive_bayes', bins_amouns)
+print('finished our nb bins test')
 # all to one csv
 df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/bins_number_test.csv')
 
@@ -286,16 +299,22 @@ df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/bins_number_test.csv')
 ###########################
 # id3
 df1 = create_nans_test( 'id3' )
+print('finished id3 nans test')
 # our id3
 df2 = create_nans_test( 'our_id3')
+print('finished our id3 nans test')
 # naive bayes
 df3 = create_nans_test( 'naive_bayes')
+print('finished nb nans test')
 # our naive bayes
 df4 = create_nans_test( 'our_naive_bayes')
+print('finished our nb nans test')
 # knn 
 df5 = create_nans_test( 'knn')
+print('finished knn nans test')
 # k means
 df6 = create_nans_test( 'k_means')
+print('finished k means nans test')
 # all to one csv
 df_to_csv(pd.concat([df1,df2,df3,df4,df5,df6]), 'test_log/missing_values_test.csv')
 
@@ -303,12 +322,16 @@ df_to_csv(pd.concat([df1,df2,df3,df4,df5,df6]), 'test_log/missing_values_test.cs
 ###########################
 # id3
 df1 = create_bining_strategy_test( 'id3' )
+print('id3 binning type test')
 # our id3
 df2 = create_bining_strategy_test( 'our_id3') 
+print('our id3 binning type test')
 # naive bayes
 df3 = create_bining_strategy_test( 'naive_bayes')
+print('nb binning type test')
 # our naive bayes
 df4 = create_bining_strategy_test( 'our_naive_bayes') 
+print('our nb binning type test')
 # all to one csv
 df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/binning_strategy_test.csv')
 
@@ -316,15 +339,21 @@ df_to_csv(pd.concat([df1,df2,df3,df4]), 'test_log/binning_strategy_test.csv')
 ###########################
 # id3
 df1 = create_split_test( 'id3' )
+print('8020 vs test test id3')
 # our id3
 df2 = create_split_test( 'our_id3')
+print('8020 vs test test our id3')
 # naive bayes
+print('8020 vs test test nb')
 df3 = create_split_test( 'naive_bayes')
 # our naive bayes
 df4 = create_split_test( 'our_naive_bayes')
+print('8020 vs test test our nb')
 # knn 
 df5 = create_split_test('knn')
+print('8020 vs test test knn')
 # k means
 df6 = create_split_test('k_means')
+print('8020 vs test test kmeans')
 # all to one csv
 df_to_csv(pd.concat([df1,df2,df3,df4,df5,df6]), 'test_log/8020_vs_test_test.csv')

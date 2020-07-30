@@ -72,5 +72,4 @@ functions = {
 
 # this function should be called from other functions
 def get_result(function_name, **kwargs):
-    print(functions[function_name])
     return functions[function_name](**kwargs)
