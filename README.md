@@ -2,7 +2,8 @@
 
 In this project we offer classification using:
 k.n.n,kmeans,id3 and naive bayes classifiers
-on a giving numpy train data set
+on a giving train data set 
+also a different preprocessing techniques are implemented
 
 ## Getting Started
 
