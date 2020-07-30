@@ -2,17 +2,13 @@
 
 In this project we offer classification using:
 k.n.n,kmeans,id3 and naive bayes classifiers
-on a giving train data set 
-also a different preprocessing techniques are implemented
+on a giving numpy train data set
 
 ## Getting Started
 
 for now the only why to run this application is to run
-Gui.py in any IDE using a compatible interpreter for gui interface
-or 
-run single_test for terminal resaults (exmples in "Break down into end to end tests" section)
-or 
-run_log_all for log creation
+Gui.py in any IDE using a compatible interpreter
+
 ### Prerequisites
 
 acording to the current running mathod you need:
@@ -92,6 +88,15 @@ get_result('our_naive_bayes',**kwargs)
 {'score': 60.34312108215111, 'TP': 708, 'TN': 1121, 'FP': 346, 'FN': 856}
 ```
 
+## File Dependency
+
+ide3.py,our_id3.py,naive_bayes.py,our_naive_bayes.py operate: Preprocessing.py
+knn.py,kmeans.py operate: Preprocessing_for_knn_and_k_means.py
+start.py operate:id3.py,kmeans.py,knn.py,naive_bayes.py,our_id3.py.our_naive_bayes.py
+Gui.py,single_test.py,run_log_all.py operate: start.py
+
+
+
 
 ## Built With
 
@@ -101,9 +106,9 @@ get_result('our_naive_bayes',**kwargs)
 
 ## Authors
 
-* **Tal Alfi** 204557052
-* **Oleg Belochitsky** 321192577
-* **Ziv Friza** 312196355
+* **Tal Alfi**
+* **Oleg Belochitsky**
+* **Ziv Friza**
 
 ## License
 
@@ -123,6 +128,3 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-
