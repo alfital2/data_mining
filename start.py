@@ -1,3 +1,7 @@
+'''
+Author's: Belochitsky Oleg , Alfi Tal , Friza Ziv
+IDs: 321192577, 204557052, 312196355
+'''
 from sklearn.model_selection import train_test_split
 import time
 import Preprocessing as pr

@@ -1,3 +1,7 @@
+'''
+Author's: Belochitsky Oleg , Alfi Tal , Friza Ziv
+IDs: 321192577, 204557052, 312196355
+'''
 
 from tkinter import *
 from tkinter import ttk

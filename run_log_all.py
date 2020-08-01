@@ -1,4 +1,7 @@
-
+'''
+Author's: Belochitsky Oleg , Alfi Tal , Friza Ziv
+IDs: 321192577, 204557052, 312196355
+'''
 from start import get_result
 import pandas as pd
 import numpy as np

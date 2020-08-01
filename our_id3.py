@@ -1,6 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# Module: id3.py
+'''
+Author's: Belochitsky Oleg , Alfi Tal , Friza Ziv
+IDs: 321192577, 204557052, 312196355
+'''
 import numpy as np
 import pandas as pd
 from numpy import log2 as log

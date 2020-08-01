@@ -1,3 +1,7 @@
+'''
+Author's: Belochitsky Oleg , Alfi Tal , Friza Ziv
+IDs: 321192577, 204557052, 312196355
+'''
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
