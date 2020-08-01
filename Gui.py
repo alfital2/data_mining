@@ -33,32 +33,6 @@ from start import get_result
 For the sins I am about to commit, may Guido van Rossum forgive me.
 '''
 
-# TODO start vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-'''
-  __          __   
- / /____  ___/ /__ 
-/ __/ _ \/ _  / _ \
-\__/\___/\_,_/\___/
-                   
-to do list:
-- import all needed modules
-- replace foo function with the right function
-- make sure function from imported modules some of the **kwargs. 
-    supported keys/values:
-    - 'test'     / test file (pandas df)
-    - 'train'    / train file (pandas df)
-    - 'structure'/ structure file (txt)
-    - 'k'        / int
-    - 'tolorance'/ copy of k
-    - 'number_of_bins' / int
-    - 'bin_type' / 'equal_width'/'equal_frequency'/'entropy'  StRiNG
-    - 'missing_values' / 'remove_nans' or 'replace_nans'  String (dah...)
-    - choosen_function / function from the modules
-
-- make sure functions return dictionaries 
-- delete temporary foo function
-- all done? working well? now delete this comment
-'''
 #                                                
 #    _ __ ___  ___  ___  _   _ _ __ ___ ___  ___ 
 #   | '__/ _ \/ __|/ _ \| | | | '__/ __/ _ \/ __|

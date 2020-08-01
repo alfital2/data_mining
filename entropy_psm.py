@@ -126,7 +126,7 @@ def split_bigest_bin(bins):
     i = ranges.index(max(ranges))
     l = bins[i][0]
     r = bins[i][1]
-    m = l + ranges[i]//2
+    m = l + ranges[i]/2
     return (*bins[:i], (l, m), (m, r),  *bins[i+1:])
 
 def split_bigest_n_times(bins, n):
@@ -206,6 +206,8 @@ def make_corect_number_of_bins(bins, weights, polarity, number_of_bins ):
         corect_bins = split_bigest_n_times(bins, dif)
     elif(dif < 0):
         corect_bins = merge_bins_n_times(bins, weights, polarity , -dif)
+    else:
+        corect_bins = bins
     return corect_bins 
 
 # entropy binning
@@ -226,6 +228,5 @@ def entropy_bining(data, column, number_of_bins):
     else:
         bin_edges = (-float('inf'),*bin_edges[1:-1], float('inf'))
     labels = np.arange(len(corect_bins))
-
     binned_column,bins = pd.cut(np.array(data[column]), bins=bin_edges, include_lowest=True, labels=labels, duplicates='drop', retbins=True)
     return binned_column, bins 

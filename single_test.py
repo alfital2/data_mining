@@ -19,10 +19,10 @@ def load_structure():
 kwargs = {   'test':pd.read_csv('test.csv'),
              'train':pd.read_csv('train.csv'),
              'structure':load_structure(),
-             'number_of_bins':10,
+             'number_of_bins':14,
              'k':5,
              'tolorance':5,
-             'bin_type':'entropy',
+             'bin_type':'equal_frequency',
              'missing_values': 'remove_nans',  
              '8020': 'yes',
     }
